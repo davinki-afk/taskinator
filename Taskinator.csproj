@@ -13,6 +13,8 @@
     <TargetFrameworkProfile></TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>taskinator.ico</ApplicationIcon>
+    <BuildWin32xxTheme Condition="'$(BuildWin32xxTheme)' == '' and Exists('$(VCTargetsPath)\Microsoft.Cpp.targets')">true</BuildWin32xxTheme>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,26 +35,83 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionButton.cs" />
+    <Compile Include="BufferedListBox.cs" />
     <Compile Include="MainForm.cs" />
+    <Compile Include="MainForm.DragDrop.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainForm.MetaLists.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormPreloader.cs" />
+    <Compile Include="KeyboardShortcuts.cs" />
+    <Compile Include="L10n.cs" />
     <Compile Include="ListIconCatalog.cs" />
     <Compile Include="IconPickerForm.cs" />
     <Compile Include="Models.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ReminderSchedule.cs" />
+    <Compile Include="SettingsForm.cs" />
+    <Compile Include="SoundPacks.cs" />
     <Compile Include="Storage.cs" />
+    <Compile Include="TagEditorForm.cs" />
+    <Compile Include="TagPalette.cs" />
     <Compile Include="TaskEditorForm.cs" />
+    <Compile Include="TaskListBox.cs" />
+    <Compile Include="TaskReminderEditor.cs" />
+    <Compile Include="TaskSearchForm.cs" />
     <Compile Include="TextPromptForm.cs" />
+    <Compile Include="ThemeStyle.cs" />
+    <Compile Include="TodoCsv.cs" />
+    <Compile Include="Win32xxTheme.cs" />
+    <Compile Include="WindowsStartup.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.manifest" />
+    <EmbeddedResource Include="taskinator.ico">
+      <LogicalName>Taskinator.taskinator.ico</LogicalName>
+    </EmbeddedResource>
+    <Content Include="lang\*.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="icons\*.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="sounds\*\*.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- Recompile the locale's Taskinator.hhp after edits. Keep Cyrillic .hhc files in Windows-1251. -->
+    <Content Include="help\*\Taskinator.chm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup Condition="'$(BuildWin32xxTheme)' == 'true'">
+    <Content Include="native\bin\$(Configuration)\Win32\Win32xxTheme.x86.dll">
+      <Link>Win32xxTheme.x86.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="native\bin\$(Configuration)\x64\Win32xxTheme.x64.dll">
+      <Link>Win32xxTheme.x64.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="native\Win32xx\copyright.txt">
+      <Link>Win32xx-License.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="BuildNativeTheme" BeforeTargets="PrepareForBuild"
+          Condition="'$(BuildWin32xxTheme)' == 'true' and '$(DesignTimeBuild)' != 'true'">
+    <MSBuild Projects="native\Win32xxTheme.vcxproj" Properties="Configuration=$(Configuration);Platform=Win32"
+             RemoveProperties="OutDir;IntDir;TargetName" />
+    <MSBuild Projects="native\Win32xxTheme.vcxproj" Properties="Configuration=$(Configuration);Platform=x64"
+             RemoveProperties="OutDir;IntDir;TargetName" />
+  </Target>
 </Project>

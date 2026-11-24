@@ -1,0 +1,11 @@
+[OPTIONS]
+Compatibility=1.1 or later
+Compiled file=Taskinator.chm
+Contents file=Taskinator.hhc
+Default topic=overview.htm
+Language=0x423 Belarusian
+Title=Taskinator
+
+[FILES]
+overview.htm
+sounds.htm

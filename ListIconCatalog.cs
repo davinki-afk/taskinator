@@ -7,15 +7,27 @@ namespace Taskinator
 {
     public class ListIconOption
     {
+        private readonly string caption;
+        private readonly TextId? captionKey;
+
         public ListIconOption(string key, string caption, Image image)
         {
             Key = key;
-            Caption = caption;
+            this.caption = caption;
             Image = image;
         }
 
+        internal ListIconOption(string key, TextId captionKey, Image image)
+            : this(key, String.Empty, image)
+        {
+            this.captionKey = captionKey;
+        }
+
         public string Key { get; private set; }
-        public string Caption { get; private set; }
+        public string Caption
+        {
+            get { return captionKey.HasValue ? L10n.Get(captionKey.Value) : caption; }
+        }
         public Image Image { get; private set; }
     }
 
@@ -24,6 +36,14 @@ namespace Taskinator
         public const string DefaultIconKey = "001.png";
         private static IList<ListIconOption> options;
         private static readonly IDictionary<string, Image> images = new Dictionary<string, Image>(StringComparer.OrdinalIgnoreCase);
+        private static readonly Lazy<Bitmap> fallback = new Lazy<Bitmap>(SystemIcons.Application.ToBitmap);
+
+        internal static bool IsValidKey(string key)
+        {
+            return String.IsNullOrEmpty(key) ||
+                (key.IndexOfAny(Path.GetInvalidFileNameChars()) < 0 &&
+                 key.EndsWith(".png", StringComparison.OrdinalIgnoreCase));
+        }
 
         public static IList<ListIconOption> GetOptions()
         {
@@ -47,7 +67,7 @@ namespace Taskinator
 
             if (loadedOptions.Count == 0)
             {
-                loadedOptions.Add(new ListIconOption(DefaultIconKey, "Стандартный", SystemIcons.Application.ToBitmap()));
+                loadedOptions.Add(new ListIconOption(DefaultIconKey, TextId.Default, fallback.Value));
             }
 
             options = loadedOptions;
@@ -75,7 +95,7 @@ namespace Taskinator
 
             // Keep the fallback independent from GetOptions so the first dialog
             // does not have to load the complete icon catalog.
-            return SystemIcons.Application.ToBitmap();
+            return fallback.Value;
         }
 
         private static Image LoadImage(string key, string file)

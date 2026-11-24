@@ -1,0 +1,19 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+  <title>Taskinator</title>
+</head>
+<body>
+<ul>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Taskinator туралы">
+    <param name="Local" value="overview.htm">
+  </object></li>
+  <li><object type="text/sitemap">
+    <param name="Name" value="Дыбыстар">
+    <param name="Local" value="sounds.htm">
+  </object></li>
+</ul>
+</body>
+</html>

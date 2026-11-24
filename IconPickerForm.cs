@@ -10,7 +10,8 @@ namespace Taskinator
         private readonly IconGridControl iconsPanel;
         public IconPickerForm(string selectedKey)
         {
-            Text = "Выбор значка";
+            ThemeStyle.StyleDialog(this);
+            Text = L10n.Get(TextId.IconPicker);
             Font = new Font("Tahoma", 8.25F);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -21,22 +22,24 @@ namespace Taskinator
             Label prompt = new Label();
             prompt.AutoSize = true;
             prompt.Location = new Point(12, 12);
-            prompt.Text = "Выберите значок для списка:";
+            prompt.Text = L10n.Get(TextId.ChooseListIcon);
             Controls.Add(prompt);
 
             iconsPanel = new IconGridControl(ListIconCatalog.GetOptions());
-            iconsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             iconsPanel.Location = new Point(12, 32);
             iconsPanel.Size = new Size(396, 270);
             iconsPanel.SelectedKey = selectedKey;
             iconsPanel.IconDoubleClick += IconGrid_DoubleClick;
-            Controls.Add(iconsPanel);
+            Controls.Add(new ThemeFrame(iconsPanel)
+            {
+                Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right
+            });
 
             Button okButton = new Button();
             okButton.DialogResult = DialogResult.OK;
             okButton.Location = new Point(252, 320);
             okButton.Size = new Size(75, 25);
-            okButton.Text = "ОК";
+            okButton.Text = L10n.Get(TextId.OK);
             okButton.Click += OkButton_Click;
             Controls.Add(okButton);
 
@@ -44,7 +47,7 @@ namespace Taskinator
             cancelButton.DialogResult = DialogResult.Cancel;
             cancelButton.Location = new Point(333, 320);
             cancelButton.Size = new Size(75, 25);
-            cancelButton.Text = "Отмена";
+            cancelButton.Text = L10n.Get(TextId.Cancel);
             Controls.Add(cancelButton);
 
             AcceptButton = okButton;
@@ -68,7 +71,7 @@ namespace Taskinator
         {
             if (String.IsNullOrEmpty(iconsPanel.SelectedKey))
             {
-                MessageBox.Show(this, "Выберите значок.", "Taskinator", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(this, L10n.Get(TextId.IconRequired), "Taskinator", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 DialogResult = DialogResult.None;
             }
         }
@@ -86,7 +89,6 @@ namespace Taskinator
                 this.options = options;
                 AutoScroll = true;
                 BackColor = SystemColors.Window;
-                BorderStyle = BorderStyle.Fixed3D;
                 DoubleBuffered = true;
                 TabStop = true;
                 Cursor = Cursors.Hand;

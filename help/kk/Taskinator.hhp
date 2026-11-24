@@ -1,0 +1,12 @@
+[OPTIONS]
+Compatibility=1.1 or later
+Compiled file=Taskinator.chm
+Contents file=Taskinator.hhc
+Default topic=overview.htm
+; Use a Windows-1251 locale for the legacy contents pane. The topics remain Kazakh UTF-8.
+Language=0x419 Russian
+Title=Taskinator
+
+[FILES]
+overview.htm
+sounds.htm

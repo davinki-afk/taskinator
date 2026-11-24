@@ -20,7 +20,7 @@ namespace Taskinator
             ListIconCatalog.GetOptions();
 
             PreloadForm(new TextPromptForm(
-                "Новый список", "Название списка:", String.Empty, ListIconCatalog.DefaultIconKey));
+                L10n.Get(TextId.NewList), L10n.Get(TextId.ListName), String.Empty, ListIconCatalog.DefaultIconKey));
             PreloadForm(new IconPickerForm(ListIconCatalog.DefaultIconKey));
             PreloadForm(new TaskEditorForm(null));
             PreloadForm(new TaskEditorForm(new TodoItem()));
